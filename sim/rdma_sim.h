@@ -69,5 +69,25 @@ struct rdma_context {
     struct sim_qp *qp;
     char *buffer;
 };
+// device related
+struct sim_device **ibv_get_device_list(int *num_devices);
+void ibv_free_device_list(struct sim_device **list);
+struct sim_context *ibv_open_device(struct sim_device *device);
+int ibv_close_device(struct sim_context *context);
+// protection domain related
+struct sim_pd *ibv_alloc_pd(struct sim_context *context);
+int ibv_dealloc_pd(struct sim_pd *pd);
+struct sim_mr *ibv_reg_mr(struct sim_pd *pd, void* addr, size_t length, int access);
+int ibv_dereg_mr(struct sim_mr *mr);
+// completion queue related
+struct sim_cq *ibv_create_cq(struct sim_context *context, int cqe, void *cq_context, void *channel, int comp_vector);
+int ibv_destroy_cq(struct sim_cq *cq);
+// qp related
+struct sim_cqp *ibv_create_qp(struct sim_pd *pd, struct ibv_qp_init_attr *attr);
+int ibv_destroy_qp(struct sim_qp *qp);
+// helper functions
+int setup_rdma_context(struct rdma_context *ctx);
+void cleanup_rdma_context(struct rdma_context *ctx);
+void simulate_rdma_operations(struct rdma_context *ctx);
 
 #endif // RDMA_SIM_H
