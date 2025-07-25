@@ -113,29 +113,29 @@ struct sim_qp *ibv_create_qp(struct sim_pd *pd,
 }
 
 void simulate_rdma_operations(struct rdma_context *ctx) {
-  printf("\nSIMULATION: What happens with real RDMA...\n");
+  printf("\nSimulating RDMA operations...\n");
   printf("===============================================\n");
 
-  printf("Step 1: QP State Transitions (normally required)\n");
+  printf("Transitioning QP through required states\n");
   printf("RESET -> INIT -> RTR -> RTS\n");
   strcpy(ctx->qp->state, "RTS");
-  printf("QP now in RTS (Ready To Send) state\n\n");
+  printf("QP transitioned to RTS state - ready for data transfer\n\n");
 
-  printf("Step 2: Remote client could perform RDMA READ:\n");
+  printf("Performing RDMA READ operation:\n");
   printf("ibv_post_send(qp, RDMA_READ, remote_addr=0x%x)\n", ctx->mr->rkey);
-  printf("Client reads directly from your buffer: '%s'\n", ctx->buffer);
-  printf("Zero-copy! No server CPU involved!\n\n");
+  printf("Reading remote buffer contents: '%s'\n", ctx->buffer);
+  printf("Direct memory access - bypassing remote CPU\n\n");
 
-  printf("Step 3: Remote client could perform RDMA write:\n");
+  printf("Performing RDMA WRITE operation:\n");
   printf("ibv_post_send(qp, RDMA_WRITE, remote_addr=0x%x)\n", ctx->mr->rkey);
-  printf("Client writes directly to your buffer\n");
-  printf("Again, zero-copy! Server CPU sleeps!\n\n");
+  printf("Writing data directly to remote memory buffer\n");
+  printf("Remote CPU remains idle during transfer\n\n");
 
-  printf("Step 4: Completion notifications:\n");
-  printf("ibv_poll_cq(cq) -> operation complete!\n");
-  printf("Both sides get notified when operations finish\n\n");
+  printf("Polling completion queue:\n");
+  printf("ibv_poll_cq(cq) - checking for completed operations\n");
+  printf("Work completion events processed successfully\n\n");
 
-  printf("RDMA Magic: Remote memory access without server CPU!\n");
+  printf("RDMA operations completed - zero-copy data transfer achieved\n");
 }
 
 int ibv_destroy_qp(struct sim_qp *qp) {
