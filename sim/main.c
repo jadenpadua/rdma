@@ -17,5 +17,6 @@ int main() {
 
     simulate_rdma_operations(&ctx);
 
+    cleanup_rdma_context(&ctx);
     return 0;
 }

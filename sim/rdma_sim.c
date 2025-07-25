@@ -128,6 +128,61 @@ void simulate_rdma_operations(struct rdma_context *ctx) {
     printf("RDMA Magic: Remote memory access without server CPU!\n");
 }
 
+int ibv_destroy_qp(struct sim_qp *qp) {
+    printf("ibv_destroy_qp() - Destroying Queue Pair with QP number: %d\n", qp->qp_num);
+    free(qp);
+    return 0;
+}
+
+int ibv_destroy_cq(struct sim_cq *cq) {
+    printf("ibv_destroy_cq() - Destroying Completion Queue\n");
+    free(cq);
+    return 0;
+}
+
+int ibv_dereg_mr(struct sim_mr *mr) {
+    printf("ibv_dereg_mr() - Destroying Memory Region\n");
+    free(mr);
+    return 0;
+}
+
+int ibv_close_device(struct sim_context *context) {
+    printf("ibv_close_device() - Closing device context\n");
+    free(context);
+    return 0;
+}
+
+int ibv_dealloc_pd(struct sim_pd *pd) {
+    printf("ibv_dealloc_pd() - Deallocating protection domain\n");
+    free(pd);
+    return 0;
+}
+void cleanup_rdma_context(struct rdma_context *ctx) {
+    printf("Cleaning up RDMA resources...\n");
+    if (ctx->qp) {
+        ibv_destroy_qp(ctx->qp);
+    }
+    if (ctx->cq) {
+        ibv_destroy_cq(ctx->cq);
+    }
+    if (ctx->mr) {
+        ibv_dereg_mr(ctx->mr);
+    }
+    if (ctx->buffer) {
+        free(ctx->buffer);
+        ctx->buffer = NULL;
+        printf("Buffer at %p freed\n", (void*)ctx->buffer);
+    }
+    if (ctx->pd) {
+        ibv_dealloc_pd(ctx->pd);
+    }
+    if (ctx->context) {
+        ibv_close_device(ctx->context);
+    }
+    printf("RDMA resources cleaned up successfully!\n");
+
+}
+
 int setup_rdma_context(struct rdma_context *ctx) {
     int num_devices;
     printf("Setting up RDMA context...\n");
@@ -193,11 +248,8 @@ int setup_rdma_context(struct rdma_context *ctx) {
         return -1;
     }
     printf("\n");
-    printf("RDMA context setup successfully!\n");
-
-    return 0;
-
-    // TODO: Clean up resources
 
     ibv_free_device_list(dev_list);
+    printf("RDMA context setup successfully!\n");
+    return 0;
 }
