@@ -1,9 +1,10 @@
-#ifndef RDMA_SIM_H
-#define RDMA_SIM_H
+#ifndef RDMA_H
+#define RDMA_H
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 
 #define IBV_ACCESS_LOCAL_WRITE 0x1
 #define IBV_ACCESS_REMOTE_WRITE 0x2
@@ -13,11 +14,13 @@
 struct sim_device {
     char name[64];
     int device_id;
+    int gpu_aware; // All devices in this sim support GPUDirect
 };
 
 struct sim_context {
     struct sim_device *device;
     int is_open;
+    int gpu_direct_enabled;
 };
 
 struct sim_pd {
@@ -25,12 +28,21 @@ struct sim_pd {
     int pd_id;
 };
 
+typedef enum {
+    MEMORY_TYPE_GPU_DEVICE,
+    MEMORY_TYPE_GPU_HOST_PINNED
+} memory_type_t;
+
 struct sim_mr {
     void *addr;
     size_t length;
     int lkey;
     int rkey;
     struct sim_pd *pd;
+    memory_type_t memory_type;
+    int gpu_id;
+    uint64_t gpu_ptr;
+    int is_dmabuf; // 0=nvidia-peermem, 1=dmabuf
 };
 
 struct sim_cq {
@@ -90,4 +102,4 @@ int setup_rdma_context(struct rdma_context *ctx);
 void cleanup_rdma_context(struct rdma_context *ctx);
 void simulate_rdma_operations(struct rdma_context *ctx);
 
-#endif // RDMA_SIM_H
+#endif // RDMA_H

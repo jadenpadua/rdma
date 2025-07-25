@@ -1,5 +1,5 @@
 #include <unistd.h>
-#include "rdma_sim.h"
+#include "rdma.h"
 
 int main() {
     struct rdma_context ctx = {0};

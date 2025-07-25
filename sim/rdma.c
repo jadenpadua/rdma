@@ -1,11 +1,13 @@
-#include "rdma_sim.h"
+#include "rdma.h"
 
 #define BUFFER_SIZE 1024
+#define USE_GPU_DIRECT 1
 
 // simulate device list (mock hardware)
 static struct sim_device sim_devices[] = {
-    {"sim_rdma_device_0", 0},
-    {"sim_rdma_device_1", 1}
+    {"mlx5_0", 0, USE_GPU_DIRECT},
+    {"mlx5_1", 1, USE_GPU_DIRECT},
+    {"mlx5_2", 2, USE_GPU_DIRECT}
 };
 
 struct sim_device **ibv_get_device_list(int *num_devices) {

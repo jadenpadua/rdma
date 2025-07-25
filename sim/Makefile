@@ -1,9 +1,9 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c99
 
-SOURCES = main.c rdma_sim.c
-HEADERS = rdma_sim.h
-SIMULATOR = rdma_simulator
+SOURCES = main.c rdma.c
+HEADERS = rdma.h
+SIMULATOR = rdma_sim
 
 all: simulator
 
@@ -25,8 +25,8 @@ test: simulator
 
 files:
 	@echo "Project structure:"
-	@echo "  rdma_sim.h     - Header with structs and function declarations"
-	@echo "  rdma_sim.c     - Implementation of RDMA simulation functions"
+	@echo "  rdma.h     - Header with structs and function declarations"
+	@echo "  rdma.c     - Implementation of RDMA simulation functions"
 	@echo "  main.c         - Clean main function"
 	@echo "  Makefile       - Build configuration"
 
