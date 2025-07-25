@@ -42,7 +42,7 @@ struct sim_cq {
 struct sim_qp {
     struct sim_pd *pd;
     struct sim_cq *send_cq;
-    struct sim_cqe *recv_cq;
+    struct sim_cq *recv_cq;
     int qp_num;
     char state[32];
 };
@@ -83,7 +83,7 @@ int ibv_dereg_mr(struct sim_mr *mr);
 struct sim_cq *ibv_create_cq(struct sim_context *context, int cqe, void *cq_context, void *channel, int comp_vector);
 int ibv_destroy_cq(struct sim_cq *cq);
 // qp related
-struct sim_cqp *ibv_create_qp(struct sim_pd *pd, struct ibv_qp_init_attr *attr);
+struct sim_qp *ibv_create_qp(struct sim_pd *pd, struct ibv_qp_init_attr *attr);
 int ibv_destroy_qp(struct sim_qp *qp);
 // helper functions
 int setup_rdma_context(struct rdma_context *ctx);
