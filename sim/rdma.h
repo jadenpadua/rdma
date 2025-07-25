@@ -36,7 +36,7 @@ typedef enum {
 } memory_type_t;
 
 struct sim_mr {
-  void *addr;
+  void *gpu_addr; // GPU pointer for GPUDirect
   size_t length;
   int lkey;
   int rkey;
@@ -82,6 +82,8 @@ struct rdma_context {
   struct sim_cq *cq;
   struct sim_qp *qp;
   char *buffer;
+  int gpu_id;
+  size_t buffer_size;
 };
 // device related
 struct sim_device **ibv_get_device_list(int *num_devices);
@@ -104,6 +106,5 @@ int ibv_destroy_qp(struct sim_qp *qp);
 // helper functions
 int setup_rdma_context(struct rdma_context *ctx);
 void cleanup_rdma_context(struct rdma_context *ctx);
-void simulate_rdma_operations(struct rdma_context *ctx);
 
 #endif // RDMA_H

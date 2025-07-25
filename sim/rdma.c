@@ -67,7 +67,7 @@ struct sim_mr *ibv_reg_mr(struct sim_pd *pd, void *addr, size_t length,
   printf("ibv_reg_mr() - Registering memory region...\n");
   printf("Address: %p, Length: %zu, Access: %d\n", addr, length, access);
   struct sim_mr *mr = malloc(sizeof(struct sim_mr));
-  mr->addr = addr;
+  mr->gpu_addr = addr;
   mr->length = length;
   mr->lkey = 0xABCD1234; // Simulated local key
   mr->rkey = 0xEF567890; // Simulated remote key
